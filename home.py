@@ -16,16 +16,16 @@ st.markdown("""
     }
     
     /* Title styles */
-    .stTitle {
+    h1 { /* Thay .stTitle bằng h1 để áp dụng cho markdown # */
         color: #1E3A8A;
         font-size: 3rem !important;
         font-weight: 700 !important;
         text-align: center;
-        padding: 2rem 0;
+        padding: 1rem 0; /* Giảm padding một chút nếu có logo phía trên */
     }
     
     /* Subtitle styles */
-    .subtitle {
+    .subtitle { /* Giữ lại nếu bạn có class này ở đâu đó, hoặc dùng h2, h3... */
         color: #4B5563;
         font-size: 1.5rem !important;
         text-align: center;
@@ -70,63 +70,106 @@ st.markdown("""
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    /* Secondary button style */
-    .stButton > button[data-baseweb="button"] {
-        background-color: #E5E7EB;
-        color: #1F2937;
+    /* Secondary button style - Cần đảm bảo áp dụng đúng */
+    /* Streamlit có thể không dùng data-baseweb="button" cho tất cả các nút
+       Nếu cần phân biệt nút secondary, có thể cần cách tiếp cận khác hoặc dùng key/class khi tạo nút */
+    /* Ví dụ mục tiêu các nút không phải là primary */
+    div[data-testid="stButton"] button:not(:hover):not([kind="primary"]):not([kind="form_submit"]) {
+        background-color: #E5E7EB; /* Màu nền cho nút secondary */
+        color: #1F2937; /* Màu chữ cho nút secondary */
+    }
+    div[data-testid="stButton"] button:not(:hover):not([kind="primary"]):not([kind="form_submit"]):hover {
+        background-color: #D1D5DB; /* Màu nền khi hover nút secondary */
     }
 
-    .stButton > button[data-baseweb="button"]:hover {
-        background-color: #D1D5DB;
-    }
 
-    /* Success button style */
-    .stButton > button[data-baseweb="button"][aria-label="Success"] {
+    /* CSS cho các loại nút cụ thể dựa trên st.button(type=...) sẽ khó hơn vì Streamlit không thêm class theo type.
+       Tuy nhiên, button mặc định đã được style ở trên.
+       Nếu bạn tạo nút với st.button("Tên nút", type="secondary"), Streamlit có thể không có style riêng.
+       Các style cho Success, Danger bên dưới là ví dụ nếu bạn có cách thêm class/aria-label đó. */
+
+    /* Success button style (ví dụ nếu có class hoặc aria-label) */
+    .stButton > button[aria-label="Success"] { /* Hoặc một class bạn tự thêm nếu có thể */
         background-color: #059669;
         color: white;
     }
 
-    .stButton > button[data-baseweb="button"][aria-label="Success"]:hover {
+    .stButton > button[aria-label="Success"]:hover {
         background-color: #047857;
     }
 
-    /* Danger button style */
-    .stButton > button[data-baseweb="button"][aria-label="Danger"] {
+    /* Danger button style (ví dụ nếu có class hoặc aria-label) */
+    .stButton > button[aria-label="Danger"] { /* Hoặc một class bạn tự thêm nếu có thể */
         background-color: #DC2626;
         color: white;
     }
 
-    .stButton > button[data-baseweb="button"][aria-label="Danger"]:hover {
+    .stButton > button[aria-label="Danger"]:hover {
         background-color: #B91C1C;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Header
-st.title("🎓 SẢN PHẨM CUỐI KỲ")
+# --- Thêm Logo ---
+logo_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Logo_Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_H%E1%BB%8Dc_S%C6%B0_Ph%E1%BA%A1m_K%E1%BB%B9_Thu%E1%BA%ADt_TP_H%E1%BB%93_Ch%C3%AD_Minh.png/960px-Logo_Tr%C6%B0%E1%BB%9Dng_%C4%90%E1%BA%A1i_H%E1%BB%8Dc_S%C6%B0_Ph%E1%BA%A1m_K%E1%BB%B9_Thu%E1%BA%ADt_TP_H%E1%BB%93_Ch%C3%AD_Minh.png"
 
-# Thông tin trường
-st.markdown('<p class="subtitle">🏫 ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP HỒ CHÍ MINH</p>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">🖥️ KHOA CÔNG NGHỆ THÔNG TIN</p>', unsafe_allow_html=True)
+# Sử dụng HTML để căn giữa logo và điều chỉnh kích thước
+# Bạn có thể điều chỉnh 'width: 200px;' thành kích thước mong muốn
+logo_html = f"""
+<div style="display: flex; justify-content: center; margin-bottom: 10px;">
+    <img src="{logo_url}" alt="Logo Trường ĐH Sư Phạm Kỹ Thuật TP. Hồ Chí Minh" style="width: 200px; height: auto;">
+</div>
+"""
+st.markdown(logo_html, unsafe_allow_html=True)
+# --- Kết thúc thêm Logo ---
 
-# Thông tin môn học
-with st.container():
-    st.markdown('<div class="info-box">', unsafe_allow_html=True)
-    st.markdown("### 📚 Thông tin môn học")
-    st.markdown("**Môn học:** Xử lý ảnh số")
-    st.markdown("**Giảng viên:** TS. Trần Tiến Đức")
-    st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("""
+# 🎓 SẢN PHẨM CUỐI KỲ
 
-# Thông tin sinh viên
-with st.container():
-    st.markdown('<div class="info-box">', unsafe_allow_html=True)
-    st.markdown("### 👨‍🎓 Sinh viên thực hiện")
-    st.markdown("""
-    - **Nguyễn Văn Luân** — 22110373
-    - **Đặng Huỳnh Sơn** — 22110406
-    """)
-    st.markdown("</div>", unsafe_allow_html=True)
+### 🏫 ĐẠI HỌC SƯ PHẠM KỸ THUẬT TP HỒ CHÍ MINH  
+### 🖥️ KHOA CÔNG NGHỆ THÔNG TIN  
 
-# Footer
+**Môn học:** Xử lý ảnh số  
+**Giảng viên:** TS. Trần Tiến Đức  
+
+**Sinh viên thực hiện:** 
+- Nguyễn Văn Luân — 22110373  
+- Đặng Huỳnh Sơn — 22110406  
+""")
+
 st.markdown("---")
-st.markdown('<p style="text-align: center; color: #6B7280;">© 2024 - Xử lý ảnh số - ĐH SPKT TP.HCM</p>', unsafe_allow_html=True)
+
+st.markdown("""
+    ## 📋 Tính năng chính
+    
+    1. **Nhận diện khuôn mặt từ Camera**
+        - Nhận diện khuôn mặt thời gian thực
+        - So sánh với cơ sở dữ liệu
+        - Hiển thị thông tin nhận diện
+    
+    2. **Nhận diện khuôn mặt từ Video**
+        - Xử lý video từ file
+        - Nhận diện khuôn mặt trong video
+        - Xuất kết quả
+
+    3. **Chương 3**
+    
+    4. **Chương 4**
+            
+    5. **Chương 9**
+            
+    6. **Nhận diện trái cây**
+
+    7. **Nhận diện biển báo**
+    """)
+
+st.markdown("---")
+
+st.markdown("""
+## 🚀 Hướng dẫn sử dụng
+
+1. Chọn chế độ từ menu bên trái
+2. Làm theo hướng dẫn trên từng trang
+3. Đảm bảo camera hoạt động (nếu sử dụng tính năng camera)
+4. Kiểm tra cơ sở dữ liệu khuôn mặt trước khi nhận diện
+""")
